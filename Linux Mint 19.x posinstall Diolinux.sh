@@ -29,26 +29,26 @@ sudo apt update -y
 sudo apt-add-repository "$PPA_LIBRATBAG" -y
 sudo add-apt-repository "$PPA_LUTRIS" -y
 sudo apt-add-repository "$PPA_GRAPHICS_DRIVERS" -y
+wget -nc "$URL_WINE_KEY"
+sudo apt-key add winehq.key
 sudo apt-add-repository "deb $URL_PPA_WINE bionic main"
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- EXECUÇÃO ----------------------------- #
 sudo apt install snapd -y
-wget -nc "$URL_WINE_KEY"
-sudo apt-key add winehq.key -y
 
 ## Atualizando o repositório depois da adição de novos repositórios ##
 sudo apt update -y
 
 ## Download e instalaçao de programas externos ##
 mkdir "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_GOOGLE_CHROME"       -O "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_SIMPLE_NOTE"         -O "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_4K_VIDEO_DOWNLOADER" -O "$DIRETORIO_DOWNLOADS"
-wget -c "$URL_INSYNC"              -O "$DIRETORIO_DOWNLOADS"
+wget -c "$URL_GOOGLE_CHROME"       -P "$DIRETORIO_DOWNLOADS"
+wget -c "$URL_SIMPLE_NOTE"         -P "$DIRETORIO_DOWNLOADS"
+wget -c "$URL_4K_VIDEO_DOWNLOADER" -P "$DIRETORIO_DOWNLOADS"
+wget -c "$URL_INSYNC"              -P "$DIRETORIO_DOWNLOADS"
 
 ## Instalando pacotes .deb baixados na sessão anterior ##
-sudo dpkg -i "$DIRETORIO_DOWNLOADS"/*.deb
+sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
 ## Programas do repositório APT##
 sudo apt install mint-meta-codecs -y
@@ -80,6 +80,4 @@ sudo apt update && sudo apt dist-upgrade -y
 flatpak update
 sudo apt autoclean
 sudo apt autoremove -y
-
-echo "Chegamos ao final!"
 # ---------------------------------------------------------------------- #
