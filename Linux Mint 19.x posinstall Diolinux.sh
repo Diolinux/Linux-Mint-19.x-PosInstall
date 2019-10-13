@@ -14,6 +14,7 @@ URL_INSYNC="https://d2t3ff60b2tol4.cloudfront.net/builds/insync_3.0.20.40428-bio
 DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
 
 PROGRAMAS_PARA_INSTALAR=(
+  snapd
   mint-meta-codecs
   winff
   guvcview
@@ -61,8 +62,6 @@ sudo apt-add-repository "deb $URL_PPA_WINE bionic main"
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- EXECUÇÃO ----------------------------- #
-sudo apt install snapd -y
-
 ## Atualizando o repositório depois da adição de novos repositórios ##
 sudo apt update -y
 
@@ -78,11 +77,11 @@ sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
 # Instalar programas no apt
 for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
-  if dpkg -l | grep -q $nome_do_programa; then
-    echo "[INSTALADO] - $nome_do_programa"
+  if ! dpkg -l | grep -q $nome_do_programa; then # Só instala se já não estiver instalado
+    apt install "$nome_do_programa" -y
   else
-    apt install "$nome_do_programa" 2> /dev/null
-    [ $? -eq 0 ] && echo "[INSTALADO] - $nome_do_programa"
+    echo "[INSTALADO] - $nome_do_programa"
+  fi
 done
 
 sudo apt install --install-recommends winehq-stable wine-stable wine-stable-i386 wine-stable-amd64 -y
