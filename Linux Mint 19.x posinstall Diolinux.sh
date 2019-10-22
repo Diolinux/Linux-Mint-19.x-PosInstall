@@ -12,6 +12,33 @@ URL_4K_VIDEO_DOWNLOADER="https://dl.4kdownload.com/app/4kvideodownloader_4.9.2-1
 URL_INSYNC="https://d2t3ff60b2tol4.cloudfront.net/builds/insync_3.0.20.40428-bionic_amd64.deb"
 
 DIRETORIO_DOWNLOADS="$HOME/Downloads/programas"
+
+PROGRAMAS_PARA_INSTALAR=(
+  snapd
+  mint-meta-codecs
+  winff
+  guvcview
+  virtualbox
+  flameshot
+  nemo-dropbox
+  steam-installer
+  steam-devices
+  steam:i386
+  ratbagd
+  piper
+  lutris
+  libvulkan1
+  libvulkan1:i386
+  libgnutls30:i386
+  libldap-2.4-2:i386
+  libgpg-error0:i386
+  libxml2:i386
+  libasound2-plugins:i386
+  libsdl2-2.0-0:i386
+  libfreetype6:i386
+  libdbus-1-3:i386
+  libsqlite3-0:i386
+)
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- REQUISITOS ----------------------------- #
@@ -35,8 +62,6 @@ sudo apt-add-repository "deb $URL_PPA_WINE bionic main"
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- EXECUÇÃO ----------------------------- #
-sudo apt install snapd -y
-
 ## Atualizando o repositório depois da adição de novos repositórios ##
 sudo apt update -y
 
@@ -50,21 +75,18 @@ wget -c "$URL_INSYNC"              -P "$DIRETORIO_DOWNLOADS"
 ## Instalando pacotes .deb baixados na sessão anterior ##
 sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
-## Programas do repositório APT##
-sudo apt install mint-meta-codecs -y
-sudo apt install winff -y
-sudo apt install guvcview -y
-sudo apt install virtualbox -y
-sudo apt install flameshot -y
-sudo apt install nemo-dropbox -y
-sudo apt install steam-installer steam-devices steam:i386 -y
-sudo apt install ratbagd -y
-sudo apt install piper -y
-sudo apt install lutris libvulkan1 libvulkan1:i386 -y
-sudo apt install --install-recommends winehq-stable wine-stable wine-stable-i386 wine-stable-amd64 -y
-sudo apt install libgnutls30:i386 libldap-2.4-2:i386 libgpg-error0:i386 libxml2:i386 libasound2-plugins:i386 libsdl2-2.0-0:i386 libfreetype6:i386 libdbus-1-3:i386 libsqlite3-0:i386 -y
+# Instalar programas no apt
+for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
+  if ! dpkg -l | grep -q $nome_do_programa; then # Só instala se já não estiver instalado
+    apt install "$nome_do_programa" -y
+  else
+    echo "[INSTALADO] - $nome_do_programa"
+  fi
+done
 
-##Instalando pacotes Flatpak ##
+sudo apt install --install-recommends winehq-stable wine-stable wine-stable-i386 wine-stable-amd64 -y
+
+## Instalando pacotes Flatpak ##
 flatpak install flathub com.obsproject.Studio -y
 
 ## Instalando pacotes Snap ##
