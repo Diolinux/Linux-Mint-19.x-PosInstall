@@ -75,14 +75,8 @@ wget -c "$URL_INSYNC"              -P "$DIRETORIO_DOWNLOADS"
 ## Instalando pacotes .deb baixados na sessão anterior ##
 sudo dpkg -i $DIRETORIO_DOWNLOADS/*.deb
 
-# Instalar programas no apt
-for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
-  if ! dpkg -l | grep -q $nome_do_programa; then # Só instala se já não estiver instalado
-    apt install "$nome_do_programa" -y
-  else
-    echo "[INSTALADO] - $nome_do_programa"
-  fi
-done
+# Baixa todos os pacotes não instalados
+sudo apt install-y $(dpkg -l ${PROGRAMAS_PARA_INSTALAR[@]} 2> /dev/null | awk 'NR>=5 ~!/^ii/{print $2}')
 
 sudo apt install --install-recommends winehq-stable wine-stable wine-stable-i386 wine-stable-amd64 -y
 
