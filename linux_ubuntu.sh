@@ -108,7 +108,7 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 sudo systemctl enable docker
 sudo wget -c "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -P /usr/local/bin/
-sudo mv /usr/local/docker-compose-$(uname -s)-$(uname -m) /usr/local/docker-compose
+sudo mv /usr/local/bin/docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 echo "==== Instalando pacotes Snap ===="
