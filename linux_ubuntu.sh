@@ -14,6 +14,7 @@ PPA_ADDRESSES=(
   ppa:graphics-drivers/ppa
   ppa:kdenlive/kdenlive-stable
   ppa:peek-developers/stable
+  ppa:fossfreedom/indicator-sysmonitor
 )
 
 PROGRAMS_VIA_APT=(
@@ -24,6 +25,7 @@ PROGRAMS_VIA_APT=(
   ffmpeg
   flameshot
   git
+  indicator-sysmonitor
   insomnia
   kdenlive
   kolourpaint
