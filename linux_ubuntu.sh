@@ -21,10 +21,11 @@ PROGRAMS_VIA_APT=(
   apt-transport-https
   brave-browser
   build-essential
-  docker
+  ca-certificates
   ffmpeg
   flameshot
   git
+  gnupg-agent
   indicator-sysmonitor
   insomnia
   kdenlive
@@ -42,6 +43,8 @@ PROGRAMS_VIA_APT=(
   libxml2:i386
   meld
   peek
+  software-properties-common
+  snapd
   unetbootin
   virtualbox
   wine
@@ -106,9 +109,15 @@ for apt_program in ${PROGRAMS_VIA_APT[@]}; do
 done
 
 echo "==== Configura docker && docker-compose ===="
+sudo apt-get remove docker docker-engine docker.io containerd runc -y
+wget --quiet -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 sudo groupadd docker
 sudo usermod -aG docker $USER
 sudo systemctl enable docker
+docker run hello-world
 sudo wget -c "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -P /usr/local/bin/
 sudo mv /usr/local/bin/docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
@@ -121,10 +130,10 @@ done
 
 # ----------------------------- PÓS-INSTALAÇÃO ----------------------------- #
 echo "==== Finalização, atualização e limpeza ===="
+sudo apt --fix-broken install
 sudo apt update && sudo apt dist-upgrade -y
 sudo apt autoclean
 sudo apt autoremove -y
-rm -rf $TEMP_PROGRAMS_DIRECTORY
 # ---------------------------------------------------------------------- #
 
 # Fim do Script #
