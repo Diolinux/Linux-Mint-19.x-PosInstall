@@ -54,7 +54,7 @@ sudo apt update -y
 
 ## Adicionando repositórios de terceiros e suporte a Snap (Driver Logitech, Lutris e Drivers Nvidia)##
 sudo apt-add-repository "$PPA_LIBRATBAG" -y
-sudo add-apt-repository "$PPA_LUTRIS" -y
+sudo apt-add-repository "$PPA_LUTRIS" -y
 sudo apt-add-repository "$PPA_GRAPHICS_DRIVERS" -y
 wget -nc "$URL_WINE_KEY"
 sudo apt-key add winehq.key
