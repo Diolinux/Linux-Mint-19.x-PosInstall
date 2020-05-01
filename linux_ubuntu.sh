@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ----------------------------- VARIÁVEIS ----------------------------- #
 TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs" # pasta temporária para salvar os arquivos .deb
-UBUNTU_VERSION = "bionic"
+UBUNTU_VERSION="eoan" # mude para o nome da sua versao do ubuntu
 
 # insira as url dos arquivos .deb que deseja baixar
 URL_DEB_FILES=(
@@ -189,7 +189,7 @@ sudo rm -rf $TEMP_PROGRAMS_DIRECTORY
 echo "==== PARA O DOCKER FUNCIONAR SEM O SUDO BASTA REINICIAR ===="
 echo "==== BIRL! PRONTO PRA DERRUBAR AS ÁRVORES DO IBIRAPUERA. ===="
 
-read -p "Reiniciar agora [s/n]: " opcao
+read -p "REINICIAR AGORA? [s/n]: " opcao
 if [ "$opcao" == "s" ] || [ "$opcao" == "S" ]; then
   sudo reboot
 fi
