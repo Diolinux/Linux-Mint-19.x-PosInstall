@@ -26,7 +26,8 @@ PROGRAMS_VIA_APT=(
   build-essential
   ca-certificates
   ca-certificates-java
-  ffmpeg 
+  ffmpeg
+  ffmpegthumbnailer
   fonts-liberation 
   java-common
   nodejs 
