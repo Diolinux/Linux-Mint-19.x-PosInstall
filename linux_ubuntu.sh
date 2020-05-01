@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # ----------------------------- VARIÁVEIS ----------------------------- #
-TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs"
+TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs" # pasta temporária para salvar os arquivos .deb
+UBUNTU_VERSION = "bionic"
 
+# insira as url dos arquivos .deb que deseja baixar
 URL_DEB_FILES=(
   https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb
   https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -9,6 +11,7 @@ URL_DEB_FILES=(
   http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb
 )
 
+# insira os endereços ppa de repositórios que deseja adicionar
 PPA_ADDRESSES=(
   ppa:gezakovacs/ppa
   ppa:graphics-drivers/ppa
@@ -17,19 +20,31 @@ PPA_ADDRESSES=(
   ppa:fossfreedom/indicator-sysmonitor
 )
 
+# insira os nomes dos programas para baixar via apt
 PROGRAMS_VIA_APT=(
   apt-transport-https
-  brave-browser
   build-essential
   ca-certificates
-  ffmpeg
-  flameshot
-  git
-  gnupg-agent
-  indicator-sysmonitor
-  insomnia
-  kdenlive
-  kolourpaint
+  ca-certificates-java
+  ffmpeg 
+  fonts-liberation 
+  java-common
+  nodejs 
+  nodejs-doc 
+  openjdk-8-jre-headless 
+  phantomjs 
+  python3-pyxattr
+  rtmpdump 
+  qml-module-qt-labs-platform
+  qml-module-qtgraphicaleffects 
+  qml-module-qtquick-controls 
+  qml-module-qtquick-dialogs
+  qml-module-qtquick-layouts 
+  qml-module-qtquick-privatewidgets 
+  qml-module-qtquick-window2 
+  qml-module-qtquick2
+  qml-module-qtwebchannel 
+  qml-module-qtwebengine 
   libasound2-plugins:i386
   libdbus-1-3:i386
   libfreetype6:i386
@@ -41,23 +56,59 @@ PROGRAMS_VIA_APT=(
   libvulkan1
   libvulkan1:i386
   libxml2:i386
+  libavdevice57 
+  libc-ares2 
+  libdc1394-22
+  libevent-2.1-6 
+  libminizip1 
+  libmpv1 
+  libopenal-data 
+  libopenal1 
+  libqt5positioning5 
+  libqt5printsupport5
+  libqt5qml5 
+  libqt5quick5 
+  libqt5sensors5 
+  libqt5webchannel5 
+  libqt5webengine-data 
+  libqt5webengine5
+  libqt5webenginecore5 
+  libqt5webkit5 
+  libre2-4 
+  libsdl2-2.0-0 
+  libsndio6.1 
+  libuchardet0 
+  libuv1 
+  libva-wayland2
   meld
   peek
-  software-properties-common
-  snapd
+  brave-browser
   unetbootin
   virtualbox
   wine
+  flameshot
+  git
+  gnupg-agent
+  indicator-sysmonitor
+  kolourpaint
+  kdenlive
+  youtube-dl
+  mpv
+  docker-ce 
+  docker-ce-cli 
+  containerd.io
 )
 
+# insira os nomes dos programas para baixar via snap
 PROGRAMS_VIA_SNAP=(
-  code --classic
-  intellij-idea-community --classic
-  skype --classic
-  spotify
-  postman
-  photogimp
-  vlc
+  "code --classic"
+  "insomnia"
+  "intellij-idea-community --classic"
+  "skype --classic"
+  "spotify"
+  "postman"
+  "photogimp"
+  "vlc"
 )
 # ---------------------------------------------------------------------- #
 
@@ -73,68 +124,72 @@ echo "==== Atualizando o repositório ===="
 sudo apt update -y
 
 echo "==== Adicionando repositórios PPA ===="
+sudo apt install software-properties-common -y
 for ppa_address in ${PPA_ADDRESSES[@]}; do
     sudo add-apt-repository "$ppa_address" -y
 done
 
-echo "==== Configura o repositório .deb ===="
-echo "deb https://dl.bintray.com/getinsomnia/Insomnia /" | sudo tee -a /etc/apt/sources.list.d/insomnia.list
-wget --quiet -O - https://insomnia.rest/keys/debian-public.key.asc | sudo apt-key add -
-
+echo "==== Configura repositório brave-browser ===="
 echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
 wget --quiet -O - https://brave-browser-apt-release.s3.brave.com/brave-core.asc | sudo apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add -
 
+echo "==== Configura repositório docker e docker-compose ===="
+sudo apt-get remove docker docker-engine docker.io containerd runc -y
+echo "deb [arch=amd64] https://download.docker.com/linux/ubuntu $UBUNTU_VERSION stable" | sudo tee /etc/apt/sources.list.d/docker-release.list
+wget --quiet -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key --keyring /etc/apt/trusted.gpg.d/docker-release.gpg add -
+sudo wget -c "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -P /usr/local/bin/
+sudo mv /usr/local/bin/docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- EXECUÇÃO ----------------------------- #
 echo "==== Atualizando o APT depois da adição de novos repositórios ===="
 sudo apt update -y
 
+echo "==== Instalando programas no APT ===="
+for apt_program in ${PROGRAMS_VIA_APT[@]}; do
+  echo "[INSTALANDO VIA APT] - $apt_program"
+  sudo apt install "$apt_program" -y
+done
+
 echo "==== Download de programas .deb ===="
 mkdir "$TEMP_PROGRAMS_DIRECTORY"
 for url in ${URL_DEB_FILES[@]}; do
-    wget -c "$url" -P "$TEMP_PROGRAMS_DIRECTORY"
+  wget -c "$url" -P "$TEMP_PROGRAMS_DIRECTORY"
 done
 
 echo "==== Instalando pacotes .deb baixados ===="
 sudo dpkg -i $TEMP_PROGRAMS_DIRECTORY/*.deb
-
-echo "==== Instalando programas no APT ===="
-for apt_program in ${PROGRAMS_VIA_APT[@]}; do
-  if ! dpkg -l | grep -q $apt_program; then # Só instala se já não estiver instalado
-    sudo apt install "$apt_program" -y
-  else
-    echo "[INSTALADO] - $apt_program"
-  fi
-done
-
-echo "==== Configura docker && docker-compose ===="
-sudo apt-get remove docker docker-engine docker.io containerd runc -y
-wget --quiet -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" -y
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y
-sudo groupadd docker
-sudo usermod -aG docker $USER
-sudo systemctl enable docker
-docker run hello-world
-sudo wget -c "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -P /usr/local/bin/
-sudo mv /usr/local/bin/docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo apt --fix-broken install -y
+# caso haja erro na primeira vez por conta de pacotes dependentes, ele roda novamente o comando
+sudo dpkg -i $TEMP_PROGRAMS_DIRECTORY/*.deb
 
 echo "==== Instalando pacotes Snap ===="
-for snap_program in ${PROGRAMS_VIA_SNAP[@]}; do
-    sudo snap install "$snap_program"
+sudo apt install snapd -y
+for snap_program in "${PROGRAMS_VIA_SNAP[@]}"; do
+  echo "[INSTALANDO VIA SNAP] - $snap_program"
+  sudo snap install $snap_program
 done
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- PÓS-INSTALAÇÃO ----------------------------- #
+echo "==== Configura docker para funcionar sem sudo ===="
+sudo groupadd docker
+sudo usermod -aG docker $USER
+sudo systemctl enable docker
+
 echo "==== Finalização, atualização e limpeza ===="
-sudo apt --fix-broken install
 sudo apt update && sudo apt dist-upgrade -y
 sudo apt autoclean
 sudo apt autoremove -y
+sudo rm -rf $TEMP_PROGRAMS_DIRECTORY
 # ---------------------------------------------------------------------- #
 
 # Fim do Script #
+echo "==== PARA O DOCKER FUNCIONAR SEM O SUDO BASTA REINICIAR ===="
 echo "==== BIRL! PRONTO PRA DERRUBAR AS ÁRVORES DO IBIRAPUERA. ===="
+
+read -p "Reiniciar agora [s/n]: " opcao
+if [ "$opcao" == "s" ] || [ "$opcao" == "S" ]; then
+  sudo reboot
+fi
