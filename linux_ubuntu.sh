@@ -80,6 +80,7 @@ PROGRAMS_VIA_APT=(
   libuchardet0 
   libuv1 
   libva-wayland2
+  gparted
   gnome-tweak-tool
   openvpn
   network-manager-openvpn
