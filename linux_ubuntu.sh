@@ -13,7 +13,6 @@ URL_DEB_FILES=(
 
 # ppa list
 PPA_ADDRESSES=(
-  ppa:gezakovacs/ppa
   ppa:graphics-drivers/ppa
   ppa:kdenlive/kdenlive-stable
   ppa:peek-developers/stable
