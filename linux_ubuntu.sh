@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ----------------------------- VARIABLES ----------------------------- #
 TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs" # temporary folder to save .deb files
-UBUNTU_VERSION="eoan" # change this value with the output codename from this command: lsb_release -c
+UBUNTU_VERSION=$(lsb_release -c | grep -oE "[^:]*$") # get version codename: focal, eoan...
 
 # .deb list
 URL_DEB_FILES=(
