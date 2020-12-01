@@ -74,9 +74,7 @@ PROGRAMS_VIA_APT=(
   libqt5webengine5
   libqt5webenginecore5 
   libqt5webkit5 
-  libre2-4 
   libsdl2-2.0-0 
-  libsndio6.1 
   libuchardet0 
   libuv1 
   libva-wayland2
