@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# ----------------------------- VARIÁVEIS ----------------------------- #
-TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs" # pasta temporária para salvar os arquivos .deb
-UBUNTU_VERSION="eoan" # mude para o nome da sua versao do ubuntu
+# ----------------------------- VARIABLES ----------------------------- #
+TEMP_PROGRAMS_DIRECTORY="$HOME/temp_programs" # temporary folder to save .deb files
+UBUNTU_VERSION="eoan" # change this value with the output codename from this command: lsb_release -c
 
-# insira as url dos arquivos .deb que deseja baixar
+# .deb list
 URL_DEB_FILES=(
   https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb
   https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -11,7 +11,7 @@ URL_DEB_FILES=(
   http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb
 )
 
-# insira os endereços ppa de repositórios que deseja adicionar
+# ppa list
 PPA_ADDRESSES=(
   ppa:gezakovacs/ppa
   ppa:graphics-drivers/ppa
@@ -20,7 +20,7 @@ PPA_ADDRESSES=(
   ppa:fossfreedom/indicator-sysmonitor
 )
 
-# insira os nomes dos programas para baixar via apt
+# apt list
 PROGRAMS_VIA_APT=(
   apt-transport-https
   build-essential
@@ -81,10 +81,13 @@ PROGRAMS_VIA_APT=(
   libuchardet0 
   libuv1 
   libva-wayland2
+  gnome-tweak-tool
+  openvpn
+  network-manager-openvpn
+  network-manager-openvpn-gnome
   meld
   peek
   brave-browser
-  unetbootin
   virtualbox
   wine
   flameshot
@@ -100,7 +103,7 @@ PROGRAMS_VIA_APT=(
   containerd.io
 )
 
-# insira os nomes dos programas para baixar via snap
+# snap list
 PROGRAMS_VIA_SNAP=(
   "code --classic"
   "insomnia"
@@ -109,11 +112,12 @@ PROGRAMS_VIA_SNAP=(
   "spotify"
   "postman"
   "photogimp"
+  "telegram-desktop"
   "vlc"
 )
 # ---------------------------------------------------------------------- #
 
-# ----------------------------- REQUISITOS ----------------------------- #
+# ----------------------------- PRE INSTALL STEP ----------------------------- #
 echo "==== Removendo travas eventuais do apt ===="
 sudo rm /var/lib/dpkg/lock-frontend
 sudo rm /var/cache/apt/archives/lock
@@ -141,9 +145,9 @@ wget --quiet -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key --
 sudo wget -c "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -P /usr/local/bin/
 sudo mv /usr/local/bin/docker-compose-$(uname -s)-$(uname -m) /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-# ---------------------------------------------------------------------- #
+# ------------------------------------------------------------------------ #
 
-# ----------------------------- EXECUÇÃO ----------------------------- #
+# ----------------------------- INSTALL STEP ----------------------------- #
 echo "==== Atualizando o APT depois da adição de novos repositórios ===="
 sudo apt update -y
 
@@ -171,14 +175,18 @@ for snap_program in "${PROGRAMS_VIA_SNAP[@]}"; do
   echo "[INSTALANDO VIA SNAP] - $snap_program"
   sudo snap install $snap_program
 done
-# ---------------------------------------------------------------------- #
 
-# ----------------------------- PÓS-INSTALAÇÃO ----------------------------- #
 echo "==== Configura docker para funcionar sem sudo ===="
 sudo groupadd docker
 sudo usermod -aG docker $USER
 sudo systemctl enable docker
 
+echo "==== Criando atalho para um arquivo em branco ===="
+mkdir $HOME/Templates
+touch $HOME/Templates/"blank file"
+# ---------------------------------------------------------------------- #
+
+# ----------------------------- CLEANING ------------------------------- #
 echo "==== Finalização, atualização e limpeza ===="
 sudo apt update && sudo apt dist-upgrade -y
 sudo apt autoclean
@@ -186,7 +194,7 @@ sudo apt autoremove -y
 sudo rm -rf $TEMP_PROGRAMS_DIRECTORY
 # ---------------------------------------------------------------------- #
 
-# Fim do Script #
+# ----------------------------- FINISH --------------------------------- #
 echo "==== PARA O DOCKER FUNCIONAR SEM O SUDO BASTA REINICIAR ===="
 echo "==== BIRL! PRONTO PRA DERRUBAR AS ÁRVORES DO IBIRAPUERA. ===="
 
@@ -194,3 +202,5 @@ read -p "REINICIAR AGORA? [s/n]: " opcao
 if [ "$opcao" == "s" ] || [ "$opcao" == "S" ]; then
   sudo reboot
 fi
+
+exit 0
