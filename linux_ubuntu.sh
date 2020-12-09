@@ -72,12 +72,14 @@ PROGRAMS_VIA_APT=(
   libqt5webchannel5 
   libqt5webengine-data 
   libqt5webengine5
-  libqt5webenginecore5 
-  libqt5webkit5 
-  libsdl2-2.0-0 
-  libuchardet0 
-  libuv1 
+  libqt5webenginecore5
+  libqt5webkit5
+  libsdl2-2.0-0
+  libuchardet0
+  libuv1
   libva-wayland2
+  net-tools
+  unrar
   gparted
   gnome-tweak-tool
   openvpn
