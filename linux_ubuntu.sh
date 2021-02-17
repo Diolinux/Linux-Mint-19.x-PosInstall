@@ -9,6 +9,7 @@ URL_DEB_FILES=(
   https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   https://dl.strem.io/linux/v4.4.106/stremio_4.4.106-1_amd64.deb
   http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb
+  https://updates.insomnia.rest/downloads/ubuntu/latest
 )
 
 # ppa list
@@ -17,6 +18,7 @@ PPA_ADDRESSES=(
   ppa:kdenlive/kdenlive-stable
   ppa:peek-developers/stable
   ppa:fossfreedom/indicator-sysmonitor
+  ppa:fish-shell/release-3
 )
 
 # apt list
@@ -78,6 +80,7 @@ PROGRAMS_VIA_APT=(
   libuchardet0
   libuv1
   libva-wayland2
+  fish
   net-tools
   unrar
   gparted
@@ -106,7 +109,6 @@ PROGRAMS_VIA_APT=(
 # snap list
 PROGRAMS_VIA_SNAP=(
   "code --classic"
-  "insomnia"
   "intellij-idea-community --classic"
   "skype --classic"
   "spotify"
@@ -180,6 +182,10 @@ echo "==== Configura docker para funcionar sem sudo ===="
 sudo groupadd docker
 sudo usermod -aG docker $USER
 sudo systemctl enable docker
+
+echo "==== Configura tema do oh-my-fish ===="
+curl -L https://get.oh-my.fish | fish
+omf install boxfish
 
 echo "==== Criando atalho para um arquivo em branco ===="
 mkdir $HOME/Templates
