@@ -83,6 +83,7 @@ PROGRAMS_VIA_APT=(
   fish
   net-tools
   unrar
+  unzip
   gparted
   gnome-tweak-tool
   openvpn
@@ -95,12 +96,14 @@ PROGRAMS_VIA_APT=(
   wine
   flameshot
   git
+  gimp
   gnupg-agent
   indicator-sysmonitor
   kolourpaint
   kdenlive
   youtube-dl
   mpv
+  vlc
   docker-ce 
   docker-ce-cli 
   containerd.io
@@ -113,9 +116,7 @@ PROGRAMS_VIA_SNAP=(
   "skype --classic"
   "spotify"
   "postman"
-  "photogimp"
   "telegram-desktop"
-  "vlc"
 )
 # ---------------------------------------------------------------------- #
 
@@ -186,6 +187,13 @@ sudo systemctl enable docker
 echo "==== Configura tema do oh-my-fish ===="
 curl -L https://get.oh-my.fish | fish
 omf install boxfish
+
+echo "==== Personaliza GIMP ===="
+wget -c "https://github.com/Diolinux/PhotoGIMP/archive/master.zip" -P "$TEMP_PROGRAMS_DIRECTORY"
+unzip $TEMP_PROGRAMS_DIRECTORY/master.zip
+mv $HOME/.config/GIMP/2.10 $HOME/.config/GIMP/2.10bkp
+cp -r master/PhotoGIMP-master/.var/app/org.gimp.GIMP/config/GIMP/2.10 $HOME/.config/GIMP
+rm -rf master
 
 echo "==== Criando atalho para um arquivo em branco ===="
 mkdir $HOME/Templates
