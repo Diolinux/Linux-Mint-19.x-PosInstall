@@ -94,6 +94,10 @@ sudo snap install spotify
 sudo snap install slack --classic
 sudo snap install skype --classic
 sudo snap install photogimp
+echo “deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /” | sudo tee /etc/apt/sources.list.d/notion-repackaged.list
+sudo apt update
+sudo apt install notion-app-enhanced
+sudo apt install notion-app
 # ---------------------------------------------------------------------- #
 
 # ----------------------------- PÓS-INSTALAÇÃO ----------------------------- #
@@ -103,3 +107,4 @@ flatpak update
 sudo apt autoclean
 sudo apt autoremove -y
 # ---------------------------------------------------------------------- #
+## Atualização com instalação do Notion##
