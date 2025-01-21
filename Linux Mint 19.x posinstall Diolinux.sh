@@ -1,4 +1,49 @@
 #!/usr/bin/env bash
+
+
+# Colaboração:    Fernando Souza - https://www.youtube.com/@fernandosuporte/
+
+clear
+
+# -------------------------------------------------------------------------------------------------
+
+# Verificar se os programas estão instalados:
+
+which dpkg     1> /dev/null || exit 1
+which apt      1> /dev/null || exit 2
+which apt-key  1> /dev/null || exit 3
+which wget     1> /dev/null || exit 4
+which flatpak  1> /dev/null || exit 5
+which snap     1> /dev/null || exit 6
+which ping     1> /dev/null || exit 7
+
+# -------------------------------------------------------------------------------------------------
+
+
+echo "
+Verificando o acesso à internet..."
+
+
+ping -c 10 www.google.com.br  1> /dev/null 2> /dev/null
+
+
+if [ "$?" -eq "0" ];
+then 
+
+      echo -e "\e[1;32m\n[VERIFICADO] - Conexão com à internet funcionando normalmente.\n\e[0m"
+
+      sleep 30
+else 
+
+     echo -e "\e[1;31m\n[ERRO] - Seu sistema não tem conexão com à internet. Verifique os cabos e o modem.\n\e[0m"
+
+     exit
+
+fi
+# -------------------------------------------------------------------------------------------------
+
+
+
 # ----------------------------- VARIÁVEIS ----------------------------- #
 PPA_LIBRATBAG="ppa:libratbag-piper/piper-libratbag-git"
 PPA_LUTRIS="ppa:lutris-team/lutris"
